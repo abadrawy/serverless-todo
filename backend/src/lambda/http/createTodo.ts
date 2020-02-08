@@ -15,6 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const newTodo: CreateTodoRequest = JSON.parse(event.body)
 
 
+
  const result= await docClient.put({
     TableName: todosTable,
     Item: newTodo

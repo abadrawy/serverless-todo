@@ -41,7 +41,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     headers: {
       'Access-Control-Allow-Origin': '*'
     },
-    body: uploadUrl
+    body: JSON.stringify({
+      uploadUrl
+    })
   };
 }
 async function todoExists(todoId: string) {
