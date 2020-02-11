@@ -50,8 +50,8 @@ export class TodoAccess {
      return deleted;
 
   }
-  async generateUploadUrl(todoId:string){
-    const validTodoId = await todoExists(todoId)
+  async generateUploadUrl(userId: string,todoId:string){
+    const validTodoId = await this.todoExists(userId,todoId)
   if (!validTodoId) {
     return {
       statusCode: 404,
@@ -73,17 +73,34 @@ export class TodoAccess {
    return uploadUrl;
   }
 
-  async updateTodo(updatedTodo: TodoUpdate, todoId:string){
+
+async  todoExists(userId: string,todoId: string) {
+  const result = await this.docClient
+    .get({
+      TableName: this.todosTable,
+      Key: {
+        userId,
+        todoId
+
+      }
+    })
+    .promise()
+
+  console.log('Get todo: ', result)
+  return !!result.Item
+}
+
+  async updateTodo(userId:string,updatedTodo: TodoUpdate, todoId:string){
     const newUpdatedTodo = await this.docClient.update({
         TableName: this.todosTable,
-        Key: { todoId },
+        Key: { userId, todoId },
         UpdateExpression: 'set todoName = :name, dueDate = :date, done = :done',
         ExpressionAttributeValues: {
           ':name':updatedTodo.name,
           ':date':updatedTodo.dueDate,
           ':done':updatedTodo.done
         },
-        ReturnValues: "UPDATED_TODO"
+        ReturnValues: "ALL_NEW"
       }).promise();
 
     return newUpdatedTodo
@@ -100,20 +117,6 @@ export class TodoAccess {
 
     }
   }
-
-async function todoExists(todoId: string) {
-  const result = await this.docClient
-    .get({
-      TableName: this.todosTable,
-      Key: {
-        id: todoId
-      }
-    })
-    .promise()
-
-  console.log('Get todo: ', result)
-  return !!result.Item
-}
 
 function createDynamoDBClient() {
   if (process.env.IS_OFFLINE) {

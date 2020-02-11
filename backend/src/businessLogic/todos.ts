@@ -16,11 +16,13 @@ export async function deleteTodo(todoId: string){
 	return todoAccess.deleteTodo(todoId)
 
 }
-export async function generateUploadUrl(todoId:string){
-	return todoAccess.generateUploadUrl(todoId)
+export async function generateUploadUrl(jwtToken: string,todoId:string){
+	  const userId = parseUserId(jwtToken)
+	return todoAccess.generateUploadUrl(userId,todoId)
 }
-export async function updateTodo(todoReq:UpdateTodoRequest, todoId: string){
-	return todoAccess.updateTodo(todoReq, todoId)
+export async function updateTodo(jwtToken: string,todoReq:UpdateTodoRequest, todoId: string){
+	 const userId = parseUserId(jwtToken)
+	return todoAccess.updateTodo(userId,todoReq, todoId)
 }
 export async function createTodo(todoReq: CreateTodoRequest,jwtToken: string): Promise<TodoItem> {
 
