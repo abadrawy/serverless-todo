@@ -65,11 +65,23 @@ export class TodoAccess {
     }
   }
 
+  
+    
+
    const uploadUrl= this.s3.getSignedUrl('putObject', {
     Bucket: this.bucketName,
     Key: todoId,
     Expires: this.urlExpiration
   })
+
+   await this.docClient.update({
+        TableName: this.todosTable,
+        Key: { userId, todoId },
+        UpdateExpression: 'set attachmentUrl = :attachmentUrl',
+        ExpressionAttributeValues: {
+          ":attachmentUrl":uploadUrl
+        },
+      }).promise();
 
    return uploadUrl;
   }
