@@ -39,10 +39,11 @@ export class TodoAccess {
     return items as TodoItem[]
   }
 
-  async deleteTodo(todoId: string){
+  async deleteTodo(userId: string,todoId: string){
     const deleted = await this.docClient.delete({
         TableName: this.todosTable,
         Key: {
+          userId,
           todoId
         }
       }).promise();
