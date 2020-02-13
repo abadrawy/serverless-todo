@@ -10,7 +10,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const split = authorization.split(' ')
   const jwtToken = split[1]
   
-  const deleted = await deleteTodo(jwtToken,todoId)
+  const deletedTodo = await deleteTodo(jwtToken,todoId)
 
 return {
     statusCode: 201,
@@ -18,7 +18,7 @@ return {
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      deleted
+      deletedTodo
     })
   };
 }

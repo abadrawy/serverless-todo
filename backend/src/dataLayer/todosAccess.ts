@@ -79,7 +79,7 @@ export class TodoAccess {
         Key: { userId, todoId },
         UpdateExpression: 'set attachmentUrl = :attachmentUrl',
         ExpressionAttributeValues: {
-          ":attachmentUrl":uploadUrl
+          ":attachmentUrl":`https://${this.bucketName}.s3.amazonaws.com/${todoId}`
         },
       }).promise();
 

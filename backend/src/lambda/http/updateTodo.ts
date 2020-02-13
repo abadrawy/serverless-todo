@@ -11,13 +11,13 @@ import { updateTodo } from '../../businessLogic/todos'
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log('Processing event: ', event)
 
-  const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+  const todoToUpdate: UpdateTodoRequest = JSON.parse(event.body)
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')
   const jwtToken = split[1]
   const todoId = event.pathParameters.todoId
 
-  const newUpdatedTodo = await updateTodo(jwtToken,updatedTodo,todoId)
+  const updatedTodo = await updateTodo(jwtToken,todoToUpdate,todoId)
 
    return {
     statusCode: 200,
@@ -25,7 +25,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-     newUpdatedTodo
+     updatedTodo
     })
   }
 
